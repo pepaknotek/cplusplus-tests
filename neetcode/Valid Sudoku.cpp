@@ -1,52 +1,21 @@
 class Solution {
 public:
     bool isValidSudoku(vector<vector<char>>& board) {
-        // check rows
-        for(int row = 0; row < 9;row ++){
-            unordered_set<int> seen;
-            for(int col = 0; col< 9;col++){
-                if(board[row][col] != '.'){
-                    int temp = board[row][col] - '0';
-                    if(seen.find(temp) != seen.end()){
-                        return false;
-                    }else{
-                        seen.insert(temp);
-                    }
-                }
+    bool rows[9][9] = {false}, cols[9][9] = {false}, boxes[9][9] = {false};
+    
+    for (int r = 0; r < 9; ++r) {
+        for (int c = 0; c < 9; ++c) {
+            if (board[r][c] != '.') {
+                int num = board[r][c] - '1'; // Index 0-8
+                int box_idx = (r / 3) * 3 + (c / 3);
                 
-            }
-        }
-        // check columns
-        for(int row = 0; row < 9;row ++){
-            unordered_set<int> seen;
-            for(int i = 0; i< 9;i++){
-                if(board[i][row] != '.'){
-                    int temp = board[i][row] - '0';
-                    if(seen.find(temp) != seen.end()){
-                        return false;
-                    }else{
-                        seen.insert(temp);
-                    }
-                }
+                if (rows[r][num] || cols[c][num] || boxes[box_idx][num])
+                    return false;
                 
+                rows[r][num] = cols[c][num] = boxes[box_idx][num] = true;
             }
         }
-        //check 3x3
-        unordered_set<char> seen[9];
-        for(int row = 0; row < 9; row ++){
-            for(int col = 0; col < 9;col++){
-                if(board[row][col] != '.'){
-                    int index = (row / 3) * 3 + (col / 3);
-                    int temp = board[row][col];
-                    if(seen[index].count(temp)){
-                        return false;
-                    }else{
-                        seen[index].insert(temp);
-                    }
-                }
-            }
-        }
-        
-        return true;
     }
+    return true;
+}
 };
